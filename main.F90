@@ -2,12 +2,16 @@
 ! Lorenz '63 model used for investigating half-precision support on Fugaku
 !
 ! ECMWF/RIKEN-CCS
+!
+! Contributors:
+! Sam Hatfield, ECMWF
+! samuel.hatfield@ecmwf.int
 !===============================================================================
 
 program main
     implicit none
 
-    ! Define precision for all real variables
+    ! Define precision for all real variables (defined by CPP macro)
     integer, parameter :: p = PREC
 
     ! Model parameters
