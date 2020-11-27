@@ -41,8 +41,8 @@ contains
 
     !> Run model using modified Euler scheme.
     !> @param[in] n_steps the length of the integration
-    !> @param[in] in the initial condition
-    !> @return out the computed trajectory
+    !> @param[in] init the initial condition
+    !> @return traj the computed trajectory
     function run_model(n_steps, init) result(traj)
         integer, intent(in) :: n_steps
         real(p), intent(in) :: init(3)
@@ -85,10 +85,9 @@ contains
 
     !> Outputs the given 2D array to a plaintext file with one row of values per
     !> time step.
-    !> @param[in] time_axis an array of time values corresponding to each row
-    !> of the output array
-    !> @param[in] output_array the array containing the data to output
-    !> to be output
+    !> @param[in] output_array the array containing the data to output to be
+    !> output
+    !> @param[in] filename the name of the output file
     subroutine output(output_array, filename)
         real(p), intent(in) :: output_array(:,:)
         character(len=*), intent(in) :: filename
