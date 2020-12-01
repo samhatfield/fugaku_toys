@@ -13,6 +13,9 @@ program main
 
     ! Define precision for all real variables (defined by CPP macro)
     integer, parameter :: p = PREC
+    
+    ! Define double-precision kind parameter
+    integer, parameter :: dp = selected_real_kind(13, 300)
 
     ! Model parameters
     real(p), parameter :: a = 10.0_p
@@ -95,7 +98,7 @@ contains
 
         open(1, file=filename)
         do i = 1, size(output_array, 1)
-            write (1,*) output_array(i,:)
+            write (1,*) real(output_array(i,:), dp)
         end do
         close(1)
     end subroutine output
