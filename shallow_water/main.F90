@@ -37,6 +37,10 @@ program main
 
     ! Main timestepping loop
     do n = 1, nstop
+        if (mod(n, 100) == 0) then
+            write (*,*) "Timestep", n
+        end if
+
         ! Calculate right-hand-side of equations
         CALL rhs(n, h, u, v, taux, tauy, fu, fv, dh, du, dv)
 
