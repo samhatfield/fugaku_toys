@@ -18,10 +18,8 @@ single : main
 half : main
 
 # Define main target
-main: io.o dynamics.o main.o 
+main: params.o io.o dynamics.o main.o
 	$(FC) -o $@ $^
-
-dynamics.o: io.o
 
 # Define generic target for Fortran 90
 %.o: %.F90

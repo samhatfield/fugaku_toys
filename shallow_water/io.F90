@@ -1,4 +1,6 @@
 module io
+    use params, only: nx, ny, nt
+
     implicit none
 
     private
@@ -6,8 +8,7 @@ module io
 
 contains
     ! Function: write data array to file
-    subroutine write_hdata_file(tdata, tddata, nt, nx, ny, tdx, tdy, filename)
-        integer :: nx, ny, nt
+    subroutine write_hdata_file(tdata, tddata, tdx, tdy, filename)
         real(8) :: tdata(0:nx,0:ny)
         real(8) :: tddata(0:nx,0:ny,0:nt), tdx, tdy
         character(len=*) :: filename
@@ -34,8 +35,7 @@ contains
     end subroutine write_hdata_file
 
     ! Function: write data array to file
-    subroutine write_udata_file(tdata, tddata, nt, nx, ny, tdx, tdy, filename)
-        integer :: nx, ny, nt
+    subroutine write_udata_file(tdata, tddata, tdx, tdy, filename)
         real(8) :: tdata(0:nx,0:ny)
         real(8) :: tddata(0:nx,0:ny,0:nt), tdx, tdy
         character(len=*) :: filename
@@ -61,8 +61,7 @@ contains
     end subroutine write_udata_file
 
     ! Function: write data array to file
-    subroutine write_vdata_file(tdata, tddata, nt, nx, ny, tdx, tdy, filename)
-        integer :: nx, ny, nt
+    subroutine write_vdata_file(tdata, tddata, tdx, tdy, filename)
         real(8) :: tdata(0:nx,0:ny)
         real(8) :: tddata(0:nx,0:ny,0:nt), tdx, tdy
         character(len=*) :: filename

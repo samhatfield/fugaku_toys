@@ -1,12 +1,9 @@
 program cgrid_shallow_water
     use dynamics, only: initialise, rhs, timeupdate
+    use params, only: nx, ny, nt, nstop, nwrite
 
     ! Written by Peter Dueben (2014) but based on Fortran 77 code by David Marshall
     implicit none
-
-    integer, parameter :: nx = 101
-    integer, parameter :: ny = 101
-    integer, parameter :: nt = 3
 
     ! PROGNOSTIC FIELDS:
     real(8) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
@@ -14,33 +11,20 @@ program cgrid_shallow_water
     real(8) :: taux(0:ny), tauy(0:nx)
     !TIME INCREMENTS FOR ADAMS-BASHFORTH TIMESTEPPING SCHEME:
     real(8) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt) ,dv(0:nx,0:ny,0:nt)
-    !COEFFICIENTS OF ADAMS-BASHFORTH TIMESTEPPING SCHEME:
-    real(8) :: ab(nt)
     ! CORIOLIS PARAMETER AT U AND V GRID-POINTS RESPECTIVELY
     real(8) :: fu(0:ny), fv(0:ny)
 
-    real(8) :: gp, f0, au ,dx, dy, rdx, rdy, dt
-    real(8) :: slip, g, rho0, h0
+    real(8) :: slip, g, rho0
 
-    integer :: j, k, n, nstop
-    integer :: ndump, nwrite
+    integer :: j, k, n
+    integer :: ndump
     character*5 :: num, crun
-    logical :: lrestart
 
     ! MODEL PARAMETER INITIALISATION
-    nstop = 20000 !number of timesteps
-    nwrite =100 !Sets frequency of output
     ndump = 0
-    ! CHOOSE BOUNDARY CONDITIONS: free-slip (0.) or no-slip (1.)?
-    slip = 1._8
-    lrestart = .FALSE.
 
     ! INITIALISE MODEL FIELDS
-    CALL initialise(nx, ny, nt, lrestart, au, h0, dt, f0, &
-        & dx, dy, gp, ab, fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
-
-    rdx = 1.0_8/dx
-    rdy = 1.0_8/dy
+    CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !    MAIN LOOP STARTS HERE
@@ -48,10 +32,10 @@ program cgrid_shallow_water
 
     do n = 1, nstop
         !CALCULATE RHS OF EQUATIONS
-        CALL rhs(n, nx, ny, nt, u, du, v, dv, h, dh, gp, rdx, rdy, au, taux, &
-            & tauy, fu, fv, lrestart, ab, dt, h0)
+        CALL rhs(n, u, du, v, dv, h, dh, taux, &
+            & tauy, fu, fv)
+
         !UPDATE PROGNOSTIC QUANTITIES
-        CALL timeupdate(n, nx, ny, nt, u, du, v, dv, h, dh, slip, ndump, num, &
-            & nwrite, dx, dy)
+        CALL timeupdate(n, u, du, v, dv, h, dh, ndump, num)
     end do
 end program cgrid_shallow_water

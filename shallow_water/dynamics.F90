@@ -1,4 +1,6 @@
 module dynamics
+    use params
+
     implicit none
 
     private
@@ -6,24 +8,20 @@ module dynamics
 
 contains
     !THIS SUBROUTINE WILL CALCULATE THE RIGHT HAND SIDE OF THE SHALLOW WATER EQUATIONS
-    subroutine rhs(n, nx, ny, nt, u, du, v, dv, h, dh, gp, rdx, rdy, au, taux, &
-        & tauy, fu, fv, lrestart, ab, dt, h0)
+    subroutine rhs(n, u, du, v, dv, h, dh, taux, &
+        & tauy, fu, fv)
 
-        integer, intent(in) :: n, nx, ny, nt
+        integer, intent(in) :: n
         real(8), intent(in) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
         real(8), intent(in) :: taux(0:ny), tauy(0:nx)
         real(8), intent(inout) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
-        real(8), intent(in) :: ab(nt)
-        real(8), intent(in) :: h0
         real(8), intent(in) :: fu(0:ny), fv(0:ny)
-        real(8), intent(in) :: gp, au, rdx, rdy, dt
-        logical, intent(in) :: lrestart
 
         integer :: i, j, k
         character*5 num,crun
         real(8) :: b(0:nx,0:ny)
         real(8) :: zeta(0:nx,0:ny)
-        real(8) :: f0, slip
+        real(8) :: f0
         real(8) :: r0, r1, r2, r3, r4, r5
 
         !!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -132,20 +130,16 @@ contains
     end subroutine rhs
 
     !THIS SUBROUTINE WILL UPDATE THE PROGNOSTIC VARIABELS
-    subroutine timeupdate(n, nx, ny, nt, u, du, v, dv, h, dh, slip, ndump, &
-        & num, nwrite, dx, dy)
+    subroutine timeupdate(n, u, du, v, dv, h, dh, ndump, num)
 
         use io, only: write_hdata_file, write_udata_file, write_vdata_file
 
-        integer, intent(in) :: n, nx, ny, nt
+        integer, intent(in) :: n
         real(8), intent(inout) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
         real(8), intent(in) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
         character*5, intent(inout) :: num
-        real(8), intent(in) :: slip
         real(8) :: mean(3), meandiff(3), std(3)
         integer, intent(inout) :: ndump
-        integer, intent(in) :: nwrite
-        real(8), intent(in) :: dx, dy
 
         integer :: i, j, k
         character*5 :: crun
@@ -194,48 +188,24 @@ contains
             if (ndump.ge.1000.and.ndump.le.9999) write(num,'(I4)') ndump
             if (ndump.ge.10000) write(num,'(I5)') ndump
             print *,num
-            call write_hdata_file(h,dh,nt,nx,ny,dx,dy,'./Output/h.noemulator.'//num)
-            call write_udata_file(u,du,nt,nx,ny,dx,dy,'./Output/u.noemulator.'//num)
-            call write_vdata_file(v,dv,nt,nx,ny,dx,dy,'./Output/v.noemulator.'//num)
+            call write_hdata_file(h,dh,dx,dy,'./Output/h.noemulator.'//num)
+            call write_udata_file(u,du,dx,dy,'./Output/u.noemulator.'//num)
+            call write_vdata_file(v,dv,dx,dy,'./Output/v.noemulator.'//num)
         endif
     end subroutine timeupdate
 
     ! INTITIALISE MODEL FIELDS FOR THE SHALLOW WATER MODEL SETUP
-    subroutine initialise(nx, ny, nt, lrestart, au, h0, dt, f0, dx, dy, gp, &
-        & ab, fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
-
-        integer, intent(in) :: nx, ny, nt
+    subroutine initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
         real(8), intent(inout) :: h(0:nx,0:ny), u(0:nx,0:ny) ,v(0:nx,0:ny)
         real(8), intent(inout) :: taux(0:ny), tauy(0:nx)
         real(8), intent(inout) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: ab(nt)
         real(8), intent(inout) :: fu(0:ny), fv(0:ny)
         character*5, intent(in) :: crun
-        logical, intent(in) :: lrestart
-        real(8), intent(inout) :: gp, f0, au, dx, dy, dt, h0
 
         integer :: i, j, i2, j2, k, l, itest
         real(8) :: vec(2+nt)
-        real(8) :: pi, beta, x0, y0
 
         real(8) :: field(0:nx,0:ny), dfield(0:nx,0:ny,nt)
-
-        pi = 3.14159265358979
-        x0 = 3480000.0
-        y0 = 3480000.0
-        au = 470.23
-        h0 = 500.
-        dt = 25.0
-        f0 = 4.46e-5
-        beta = 2.e-11
-        dx = x0/real(nx - 1)
-        dy = y0/real(ny - 1)
-        gp = 9.81
-
-        ! Adams-Bashforth parameters
-        ab(1) = (23./12.)*dt
-        ab(2) = -(16./12.)*dt
-        ab(3) = (5./12.)*dt
 
         ! Define Coriolis parameter and initial u,v,h,zeta
         do j = 0, ny
