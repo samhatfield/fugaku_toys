@@ -294,9 +294,9 @@ contains
                 end do
             end do
         else
-            open(12, file='./initial/u.dat', STATUS='OLD', ACTION='read')
-            open(13, file='./initial/v.dat', STATUS='OLD', ACTION='read')
-            open(14, file='./initial/h.dat', STATUS='OLD', ACTION='read')
+            open(12, file='./initial/u.dat', status='old', action='read')
+            open(13, file='./initial/v.dat', status='old', action='read')
+            open(14, file='./initial/h.dat', status='old', action='read')
 
             do j = 1, ny-1
                 do i = 1, nx-1

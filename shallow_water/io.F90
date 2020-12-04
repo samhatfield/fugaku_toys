@@ -30,7 +30,7 @@ contains
         character(len=1024) :: filename
         integer :: j
 
-        ! Define outputfile name
+        ! Define output file name
         write (filename, "(A9,A1,A1,I5.5,A4)") './output/', field_name, '.', &
             & timestep, '.txt'
 
