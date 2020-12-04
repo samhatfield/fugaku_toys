@@ -17,10 +17,9 @@ program cgrid_shallow_water
     real(8) :: slip, g, rho0
 
     integer :: j, k, n
-    character*5 :: crun
 
     ! INITIALISE MODEL FIELDS
-    CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
+    CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
 
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !    MAIN LOOP STARTS HERE

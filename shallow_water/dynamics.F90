@@ -18,7 +18,7 @@ contains
         real(8), intent(in) :: fu(0:ny), fv(0:ny)
 
         integer :: i, j, k
-        character*5 num,crun
+        character*5 num
         real(8) :: b(0:nx,0:ny)
         real(8) :: zeta(0:nx,0:ny)
         real(8) :: f0
@@ -140,7 +140,6 @@ contains
         real(8) :: mean(3), meandiff(3), std(3)
 
         integer :: i, j, k
-        character*5 :: crun
         real(8) :: r1, r4
 
         r1 = 2.0
@@ -186,12 +185,11 @@ contains
     end subroutine timeupdate
 
     ! INTITIALISE MODEL FIELDS FOR THE SHALLOW WATER MODEL SETUP
-    subroutine initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
+    subroutine initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
         real(8), intent(inout) :: h(0:nx,0:ny), u(0:nx,0:ny) ,v(0:nx,0:ny)
         real(8), intent(inout) :: taux(0:ny), tauy(0:nx)
         real(8), intent(inout) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
         real(8), intent(inout) :: fu(0:ny), fv(0:ny)
-        character*5, intent(in) :: crun
 
         integer :: i, j, i2, j2, k, l, itest
         real(8) :: vec(2+nt)
@@ -240,9 +238,9 @@ contains
                 end do
             end do
         else
-            open(12,file='./initial/u.dat.'//TRIM(crun), STATUS='OLD', ACTION='read')
-            open(13,file='./initial/v.dat.'//TRIM(crun), STATUS='OLD', ACTION='read')
-            open(14,file='./initial/h.dat.'//TRIM(crun), STATUS='OLD', ACTION='read')
+            open(12,file='./initial/u.dat', STATUS='OLD', ACTION='read')
+            open(13,file='./initial/v.dat', STATUS='OLD', ACTION='read')
+            open(14,file='./initial/h.dat', STATUS='OLD', ACTION='read')
 
             do j=1,ny-1
                 do i=1,nx-1
