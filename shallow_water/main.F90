@@ -38,9 +38,9 @@ program main
     ! Main timestepping loop
     do n = 1, nstop
         ! Calculate right-hand-side of equations
-        CALL rhs(n, u, du, v, dv, h, dh, taux, tauy, fu, fv)
+        CALL rhs(n, h, u, v, taux, tauy, fu, fv, dh, du, dv)
 
         ! Update prognostic variables
-        CALL timeupdate(n, u, du, v, dv, h, dh)
+        CALL timeupdate(n, dh, du, dv, h, u, v)
     end do
 end program main
