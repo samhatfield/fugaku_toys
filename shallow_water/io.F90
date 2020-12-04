@@ -1,6 +1,9 @@
 module io
     implicit none
 
+    private
+    public write_hdata_file, write_udata_file, write_vdata_file
+
 contains
     ! Function: write data array to file
     subroutine write_hdata_file(tdata, tddata, nt, nx, ny, tdx, tdy, filename)

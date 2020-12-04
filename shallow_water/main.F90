@@ -1,4 +1,6 @@
 program cgrid_shallow_water
+    use dynamics, only: initialise, rhs, timeupdate
+
     ! Written by Peter Dueben (2014) but based on Fortran 77 code by David Marshall
     implicit none
 
