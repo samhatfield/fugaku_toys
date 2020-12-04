@@ -9,7 +9,7 @@ module params
     integer, parameter :: ny = 101
     integer, parameter :: nt = 3
 
-    integer, parameter :: nstop = 20000 !number of timesteps
+    integer, parameter :: nstop = 2000 !number of timesteps
     integer, parameter :: nwrite = 100 !Sets frequency of output
 
     real(8), parameter :: pi = 3.14159265358979
