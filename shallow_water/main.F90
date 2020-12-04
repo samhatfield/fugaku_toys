@@ -1,36 +1,46 @@
-program cgrid_shallow_water
-    use dynamics, only: initialise, rhs, timeupdate
-    use params, only: nx, ny, nt, nstop, nwrite
+!===============================================================================
+! Shallow water model used for investigating half-precision support on Fugaku
+!
+! ECMWF/RIKEN-CCS
+!
+! Contributors:
+! Sam Hatfield, ECMWF
+! Peter Dueben, ECMWF
+! Dave Marshall, University of Oxford
+!
+! samuel.hatfield@ecmwf.int
+!===============================================================================
 
-    ! Written by Peter Dueben (2014) but based on Fortran 77 code by David Marshall
+program main
+    use dynamics, only: initialise, rhs, timeupdate
+    use params, only: nx, ny, nt, nstop
+
     implicit none
 
-    ! PROGNOSTIC FIELDS:
+    ! Define prognostic fields (height, eastward current, northward current)
     real(8) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
-    !WIND FORCING:
+
+    ! Define wind stress fields
     real(8) :: taux(0:ny), tauy(0:nx)
-    !TIME INCREMENTS FOR ADAMS-BASHFORTH TIMESTEPPING SCHEME:
-    real(8) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt) ,dv(0:nx,0:ny,0:nt)
-    ! CORIOLIS PARAMETER AT U AND V GRID-POINTS RESPECTIVELY
+
+    ! Define time increments for Adams-Bashforth timestepping scheme
+    real(8) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
+
+    ! Define Coriolis parameters for U and V gridpoints, respectively
     real(8) :: fu(0:ny), fv(0:ny)
 
-    real(8) :: slip, g, rho0
+    ! Timestep loop index
+    integer :: n
 
-    integer :: j, k, n
-
-    ! INITIALISE MODEL FIELDS
+    ! Initialise model fields
     CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
 
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !    MAIN LOOP STARTS HERE
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+    ! Main timestepping loop
     do n = 1, nstop
-        !CALCULATE RHS OF EQUATIONS
-        CALL rhs(n, u, du, v, dv, h, dh, taux, &
-            & tauy, fu, fv)
+        ! Calculate right-hand-side of equations
+        CALL rhs(n, u, du, v, dv, h, dh, taux, tauy, fu, fv)
 
-        !UPDATE PROGNOSTIC QUANTITIES
+        ! Update prognostic variables
         CALL timeupdate(n, u, du, v, dv, h, dh)
     end do
-end program cgrid_shallow_water
+end program main
