@@ -130,16 +130,14 @@ contains
     end subroutine rhs
 
     !THIS SUBROUTINE WILL UPDATE THE PROGNOSTIC VARIABELS
-    subroutine timeupdate(n, u, du, v, dv, h, dh, ndump, num)
+    subroutine timeupdate(n, u, du, v, dv, h, dh)
 
-        use io, only: write_hdata_file, write_udata_file, write_vdata_file
+        use io, only: write_field
 
         integer, intent(in) :: n
         real(8), intent(inout) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
         real(8), intent(in) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
-        character*5, intent(inout) :: num
         real(8) :: mean(3), meandiff(3), std(3)
-        integer, intent(inout) :: ndump
 
         integer :: i, j, k
         character*5 :: crun
@@ -180,17 +178,10 @@ contains
         end do
 
         !WRITE OUTPUT IF NECESSARY
-        if (mod(n,nwrite).eq.0) then
-            ndump=ndump+1
-            if (ndump.le.9) write(num,'(I1)') ndump
-            if (ndump.ge.10.and.ndump.le.99) write(num,'(I2)') ndump
-            if (ndump.ge.100.and.ndump.le.999) write(num,'(I3)') ndump
-            if (ndump.ge.1000.and.ndump.le.9999) write(num,'(I4)') ndump
-            if (ndump.ge.10000) write(num,'(I5)') ndump
-            print *,num
-            call write_hdata_file(h,dh,dx,dy,'./Output/h.noemulator.'//num)
-            call write_udata_file(u,du,dx,dy,'./Output/u.noemulator.'//num)
-            call write_vdata_file(v,dv,dx,dy,'./Output/v.noemulator.'//num)
+        if (mod(n, nwrite) == 0) then
+            call write_field(h, 'h', n)
+            call write_field(u, 'u', n)
+            call write_field(v, 'v', n)
         endif
     end subroutine timeupdate
 

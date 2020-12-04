@@ -17,11 +17,7 @@ program cgrid_shallow_water
     real(8) :: slip, g, rho0
 
     integer :: j, k, n
-    integer :: ndump
-    character*5 :: num, crun
-
-    ! MODEL PARAMETER INITIALISATION
-    ndump = 0
+    character*5 :: crun
 
     ! INITIALISE MODEL FIELDS
     CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv, crun)
@@ -36,6 +32,6 @@ program cgrid_shallow_water
             & tauy, fu, fv)
 
         !UPDATE PROGNOSTIC QUANTITIES
-        CALL timeupdate(n, u, du, v, dv, h, dh, ndump, num)
+        CALL timeupdate(n, u, du, v, dv, h, dh)
     end do
 end program cgrid_shallow_water
