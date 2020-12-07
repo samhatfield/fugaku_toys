@@ -54,18 +54,18 @@ contains
         real(p) :: f0
         real(p) :: r0, r1, r2, r3, r4, r5
 
-        r0 = 0.125
-        r1 = 2.0
-        r2 = 0.25
-        r3 = 0.5
-        r4 = 1.0
+        r0 = 0.125_p
+        r1 = 2.0_p
+        r2 = 0.25_p
+        r3 = 0.5_p
+        r4 = 1.0_p
 
         ! Calculate Bernoulli potential
         ! 1/g*h+0.5(u^2+v^2)
         do j = 0, ny-1
             do i = 0, nx-1
-                b(i,j) = gp*h(i,j) + r0*((u(i,j) + u(i+1,j))**2.0 + &
-                    & (v(i,j) + v(i,j+1))**2)
+                b(i,j) = gp*h(i,j) + r0*((u(i,j) + u(i+1,j))**2.0_p + &
+                    & (v(i,j) + v(i,j+1))**2.0_p)
             end do
         end do
 
@@ -177,7 +177,7 @@ contains
         real(p), intent(inout) :: u(0:nx,0:ny)
         real(p), intent(inout) :: v(0:nx,0:ny)
 
-        real(p) :: mean(3), meandiff(3), std(3), r1 = 2.0, r4 = 1.0
+        real(p) :: mean(3), meandiff(3), std(3), r1 = 2.0_p, r4 = 1.0_p
         integer :: i, j, k
 
         do j = 1, ny-1
@@ -257,19 +257,20 @@ contains
 
         ! Define Coriolis parameter for U grid
         do j = 0, ny
-            fu(j) = f0 + beta*y0*(real(j) - 0.5)/real(ny - 1)
+            fu(j) = f0 + beta*y0*(real(j,p) - 0.5_p)/real(ny - 1,p)
         end do
 
         ! Define Coriolis parameter for V grid
         do j = 0, ny
-            fv(j) = f0 + beta*y0*real(j - 1)/real(ny - 1)
+            fv(j) = f0 + beta*y0*real(j - 1,p)/real(ny - 1,p)
         end do
 
         ! Define the wind forcing:
         do i = 0, ny - 1
-            taux(i) = 0.12*(cos(2.0*pi*((real(i) - 0.5)*y0/real(ny - 1) - &
-                & 0.5*y0)/y0) + 2.0*sin(pi*((real(i) - 0.5)*y0/real(ny - 1) - &
-                & 0.5*y0)/y0))/(999.8*h0)
+            taux(i) = 0.12_p*(cos(2.0_p*pi*((real(i,p) - 0.5_p)*y0 / &
+                & real(ny-1,p) - 0.5_p*y0)/y0) + &
+                & 2.0_p*sin(pi*((real(i,p) - 0.5_p)*y0/real(ny-1,p) - &
+                & 0.5_p*y0)/y0))/(999.8_p*h0)
         end do
 
         do i = 0, nx
@@ -280,23 +281,23 @@ contains
         IF (.not. lrestart) THEN
             do j = 0, ny
                 do i = 0, nx
-                    h(i,j) = 0.0
-                    dh(i,j,1) = 0.0
-                    dh(i,j,2) = 0.0
+                    h(i,j) = 0.0_p
+                    dh(i,j,1) = 0.0_p
+                    dh(i,j,2) = 0.0_p
                 end do
             end do
             do j =0, ny
                 do i = 0, nx
-                    u(i,j) = 0.0
-                    du(i,j,1) = 0.0
-                    du(i,j,2) = 0.0
+                    u(i,j) = 0.0_p
+                    du(i,j,1) = 0.0_p
+                    du(i,j,2) = 0.0_p
                 end do
             end do
             do j = 0, ny
                 do i = 0, nx
-                    v(i,j) = 0.0
-                    dv(i,j,1) = 0.0
-                    dv(i,j,2) = 0.0
+                    v(i,j) = 0.0_p
+                    dv(i,j,1) = 0.0_p
+                    dv(i,j,2) = 0.0_p
                 end do
             end do
         else
