@@ -31,7 +31,7 @@ contains
         integer :: j
 
         ! Define output file name
-        write (filename, "(A9,A1,A1,I5.5,A4)") './output/', field_name, '.', &
+        write (filename, "(A9,A1,A1,I8.8,A4)") './output/', field_name, '.', &
             & timestep, '.txt'
 
         ! Write field to file

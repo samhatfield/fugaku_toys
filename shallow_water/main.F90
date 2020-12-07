@@ -37,7 +37,7 @@ program main
 
     ! Main timestepping loop
     do n = 1, nstop
-        if (mod(n, 100) == 0) then
+        if (mod(n, 1000) == 0) then
             write (*,*) "Timestep", n
         end if
 

@@ -249,6 +249,12 @@ contains
 
         real(8) :: field(0:nx,0:ny), dfield(0:nx,0:ny,nt)
 
+        if (nstop > 99999999) then
+            write (*,*) "Integration length longer than 99999999 time steps"
+            write (*,*) "Output filenames will not be formatted correctly"
+            stop
+        end if
+
         ! Define Coriolis parameter for U grid
         do j = 0, ny
             fu(j) = f0 + beta*y0*(real(j) - 0.5)/real(ny - 1)
