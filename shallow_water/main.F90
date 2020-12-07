@@ -13,21 +13,21 @@
 
 program main
     use dynamics, only: initialise, rhs, timeupdate
-    use params, only: nx, ny, nt, nstop
+    use params, only: p, nx, ny, nt, nstop
 
     implicit none
 
     ! Define prognostic fields (height, eastward current, northward current)
-    real(8) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
+    real(p) :: h(0:nx,0:ny), u(0:nx,0:ny), v(0:nx,0:ny)
 
     ! Define wind stress fields
-    real(8) :: taux(0:ny), tauy(0:nx)
+    real(p) :: taux(0:ny), tauy(0:nx)
 
     ! Define time increments for Adams-Bashforth timestepping scheme
-    real(8) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
+    real(p) :: dh(0:nx,0:ny,0:nt), du(0:nx,0:ny,0:nt), dv(0:nx,0:ny,0:nt)
 
     ! Define Coriolis parameters for U and V gridpoints, respectively
-    real(8) :: fu(0:ny), fv(0:ny)
+    real(p) :: fu(0:ny), fv(0:ny)
 
     ! Timestep loop index
     integer :: n

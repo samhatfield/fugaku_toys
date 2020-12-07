@@ -36,23 +36,23 @@ contains
     !>                  current
     subroutine rhs(n, h, u, v, taux, tauy, fu, fv, dh, du, dv)
         integer, intent(in) :: n
-        real(8), intent(in) :: h(0:nx,0:ny)
-        real(8), intent(in) :: u(0:nx,0:ny)
-        real(8), intent(in) :: v(0:nx,0:ny)
-        real(8), intent(in) :: taux(0:ny)
-        real(8), intent(in) :: tauy(0:nx)
-        real(8), intent(in) :: fu(0:ny)
-        real(8), intent(in) :: fv(0:ny)
-        real(8), intent(inout) :: dh(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: du(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: dv(0:nx,0:ny,0:nt)
+        real(p), intent(in) :: h(0:nx,0:ny)
+        real(p), intent(in) :: u(0:nx,0:ny)
+        real(p), intent(in) :: v(0:nx,0:ny)
+        real(p), intent(in) :: taux(0:ny)
+        real(p), intent(in) :: tauy(0:nx)
+        real(p), intent(in) :: fu(0:ny)
+        real(p), intent(in) :: fv(0:ny)
+        real(p), intent(inout) :: dh(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: du(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
         integer :: i, j, k
         character*5 num
-        real(8) :: b(0:nx,0:ny)
-        real(8) :: zeta(0:nx,0:ny)
-        real(8) :: f0
-        real(8) :: r0, r1, r2, r3, r4, r5
+        real(p) :: b(0:nx,0:ny)
+        real(p) :: zeta(0:nx,0:ny)
+        real(p) :: f0
+        real(p) :: r0, r1, r2, r3, r4, r5
 
         r0 = 0.125
         r1 = 2.0
@@ -170,14 +170,14 @@ contains
         use io, only: write_field
 
         integer, intent(in) :: n
-        real(8), intent(in) :: dh(0:nx,0:ny,0:nt)
-        real(8), intent(in) :: du(0:nx,0:ny,0:nt)
-        real(8), intent(in) :: dv(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: h(0:nx,0:ny)
-        real(8), intent(inout) :: u(0:nx,0:ny)
-        real(8), intent(inout) :: v(0:nx,0:ny)
+        real(p), intent(in) :: dh(0:nx,0:ny,0:nt)
+        real(p), intent(in) :: du(0:nx,0:ny,0:nt)
+        real(p), intent(in) :: dv(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: h(0:nx,0:ny)
+        real(p), intent(inout) :: u(0:nx,0:ny)
+        real(p), intent(inout) :: v(0:nx,0:ny)
 
-        real(8) :: mean(3), meandiff(3), std(3), r1 = 2.0, r4 = 1.0
+        real(p) :: mean(3), meandiff(3), std(3), r1 = 2.0, r4 = 1.0
         integer :: i, j, k
 
         do j = 1, ny-1
@@ -233,21 +233,21 @@ contains
     !> @param[inout] dv the Adams-Bashforth time increment array for northward
     !>                  current
     subroutine initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
-        real(8), intent(inout) :: fu(0:ny)
-        real(8), intent(inout) :: fv(0:ny)
-        real(8), intent(inout) :: taux(0:ny)
-        real(8), intent(inout) :: tauy(0:nx)
-        real(8), intent(inout) :: h(0:nx,0:ny)
-        real(8), intent(inout) :: dh(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: u(0:nx,0:ny)
-        real(8), intent(inout) :: du(0:nx,0:ny,0:nt)
-        real(8), intent(inout) :: v(0:nx,0:ny)
-        real(8), intent(inout) :: dv(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: fu(0:ny)
+        real(p), intent(inout) :: fv(0:ny)
+        real(p), intent(inout) :: taux(0:ny)
+        real(p), intent(inout) :: tauy(0:nx)
+        real(p), intent(inout) :: h(0:nx,0:ny)
+        real(p), intent(inout) :: dh(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: u(0:nx,0:ny)
+        real(p), intent(inout) :: du(0:nx,0:ny,0:nt)
+        real(p), intent(inout) :: v(0:nx,0:ny)
+        real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
         integer :: i, j, i2, j2, k, l
-        real(8) :: vec(2+nt)
+        real(p) :: vec(2+nt)
 
-        real(8) :: field(0:nx,0:ny), dfield(0:nx,0:ny,nt)
+        real(p) :: field(0:nx,0:ny), dfield(0:nx,0:ny,nt)
 
         if (nstop > 99999999) then
             write (*,*) "Integration length longer than 99999999 time steps"

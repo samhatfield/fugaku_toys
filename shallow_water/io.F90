@@ -21,9 +21,9 @@ contains
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
     subroutine write_field(field, field_name, timestep)
-        use params, only: nx, ny
+        use params, only: p, nx, ny
 
-        real(8), intent(in) :: field(0:nx,0:ny)
+        real(p), intent(in) :: field(0:nx,0:ny)
         character, intent(in) :: field_name
         integer, intent(in) :: timestep
 
