@@ -46,7 +46,7 @@ program main
         val_dp = 2.0_dp**(lower + real(i,dp)*(upper - lower)/real(n_samples,dp))
         val_rpe = val_dp
         val_fug = val_dp
-        write(1, '(3d15.7)') val_dp, val_rpe%val, real(val_fug,dp)
+        write(1, '(d15.7,x,d15.7,x,d15.7)') val_dp, val_rpe%val, real(val_fug,dp)
     end do
     close(1)
 end program main
