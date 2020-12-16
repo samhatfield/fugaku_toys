@@ -47,18 +47,15 @@ contains
         real(p), intent(inout) :: du(0:nx,0:ny,0:nt)
         real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
-        integer :: i, j, k
-        character*5 num
+        integer :: i, j
         real(p) :: b(0:nx,0:ny)
         real(p) :: zeta(0:nx,0:ny)
-        real(p) :: f0
-        real(p) :: r0, r1, r2, r3, r4, r5
+        real(p) :: r0, r1, r2, r3
 
         r0 = 0.125_p
         r1 = 2.0_p
         r2 = 0.25_p
         r3 = 0.5_p
-        r4 = 1.0_p
 
         ! Calculate Bernoulli potential
         ! 1/g*h+0.5(u^2+v^2)
@@ -177,8 +174,8 @@ contains
         real(p), intent(inout) :: u(0:nx,0:ny)
         real(p), intent(inout) :: v(0:nx,0:ny)
 
-        real(p) :: mean(3), meandiff(3), std(3), r1 = 2.0_p, r4 = 1.0_p
-        integer :: i, j, k
+        real(p) :: r1 = 2.0_p, r4 = 1.0_p
+        integer :: i, j
 
         do j = 1, ny-1
             do i = 2, nx-1
@@ -244,10 +241,8 @@ contains
         real(p), intent(inout) :: v(0:nx,0:ny)
         real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
-        integer :: i, j, i2, j2, k, l
+        integer :: i, j
         real(p) :: vec(2+nt)
-
-        real(p) :: field(0:nx,0:ny), dfield(0:nx,0:ny,nt)
 
         if (nstop > 99999999) then
             write (*,*) "Integration length longer than 99999999 time steps"
