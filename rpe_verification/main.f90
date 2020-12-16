@@ -41,10 +41,12 @@ program main
     ! Loop over total number of samples, creating a double-precision variable,
     ! storing this in the rpe and Fugaku half-precision variables, and then
     ! outputting all numbers to file
+    open(1, file="output.txt")
     do i = 0, n_samples-1
         val_dp = 2.0_dp**(lower + real(i,dp)*(upper - lower)/real(n_samples,dp))
         val_rpe = val_dp
         val_fug = val_dp
-        write(*, '(3d15.7)') val_dp, val_rpe%val, val_fug
+        write(1, '(3d15.7)') val_dp, val_rpe%val, real(val_fug,dp)
     end do
+    close(1)
 end program main
