@@ -33,7 +33,7 @@ program main
     integer :: n
 
     ! Initialise model fields
-    CALL initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
+    call initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
 
     ! Main timestepping loop
     do n = 1, nstop
@@ -42,9 +42,9 @@ program main
         end if
 
         ! Calculate right-hand-side of equations
-        CALL rhs(n, h, u, v, taux, tauy, fu, fv, dh, du, dv)
+        call rhs(n, h, u, v, taux, tauy, fu, fv, dh, du, dv)
 
         ! Update prognostic variables
-        CALL timeupdate(n, dh, du, dv, h, u, v)
+        call timeupdate(n, dh, du, dv, h, u, v)
     end do
 end program main
