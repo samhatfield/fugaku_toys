@@ -5,7 +5,10 @@
 # ECMWF/RIKEN-CCS
 #===============================================================================
 
-FC = gfortran
+# Set compiler to Fujitsu if not already set
+ifeq ($(FORTCOMP),)
+FORTCOMP := frtpx
+endif
 
 # Define bytewidths for different real kinds
 double : PREC = 8
@@ -19,11 +22,11 @@ half : main
 
 # Define main target
 main: main.o
-	$(FC) -o $@ $^
+	$(FORTCOMP) -o $@ $^
 
 # Define generic target for Fortran 90
 %.o: %.F90
-	$(FC) -c -cpp -DPREC=$(PREC) $< -o $(basename $<).o
+	$(FORTCOMP) -c -cpp -DPREC=$(PREC) $< -o $(basename $<).o
 
 # Define clean task
 .PHONY: clean
