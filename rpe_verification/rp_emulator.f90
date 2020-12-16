@@ -261,11 +261,6 @@ MODULE rp_emulator
         MODULE PROCEDURE tiny_rpe
     END INTERFACE tiny
 
-    PUBLIC :: kind
-    INTERFACE kind
-        MODULE PROCEDURE kind_rpe
-    END INTERFACE kind
-
     PUBLIC :: abs
     INTERFACE abs
         MODULE PROCEDURE abs_rpe
@@ -1734,16 +1729,6 @@ CONTAINS
         x%sbits = significand_bits(a)
         x = TINY(a%val)
     END FUNCTION tiny_rpe
-
-    !-------------------------------------------------------------------
-    ! Overloaded definitions for 'kind':
-    !
-
-    FUNCTION kind_rpe (a) RESULT (x)
-        TYPE(rpe_var), INTENT(IN) :: a
-        INTEGER :: x
-        x = KIND(a%val)
-    END FUNCTION kind_rpe
 
     !-------------------------------------------------------------------
     ! Overloaded definitions for 'abs':
