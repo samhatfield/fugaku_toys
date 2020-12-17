@@ -3,7 +3,10 @@ module params
 
     public
 
-    ! Define precision for all real variables (defined by CPP macro)
+    ! Define double-precision real type
+    integer, parameter :: dp = selected_real_kind(13, 300)
+
+    ! Define default precision for all real variables (defined by CPP macro)
     integer, parameter :: p = PREC
 
     logical, parameter :: lrestart = .false.
@@ -15,14 +18,14 @@ module params
     integer, parameter :: nstop = 2000 !number of timesteps
     integer, parameter :: nwrite = 100 !Sets frequency of output
 
-    real(p), parameter :: pi = 3.14159265358979_p
-    real(p), parameter :: x0 = 3480000.0_p
-    real(p), parameter :: y0 = 3480000.0_p
+    real(dp), parameter :: pi = 3.14159265358979_dp
+    real(dp), parameter :: x0 = 3480000.0_dp
+    real(dp), parameter :: y0 = 3480000.0_dp
     real(p), parameter :: au = 470.23_p
     real(p), parameter :: h0 = 500.0_p
     real(p), parameter :: dt = 25.0_p
     real(p), parameter :: f0 = 4.46e-5_p
-    real(p), parameter :: beta = 2.0e-11_p
+    real(dp), parameter :: beta = 2.0e-11_dp
     real(p), parameter :: gp = 9.81_p
     real(p), parameter :: dx = x0/real(nx - 1,p)
     real(p), parameter :: dy = y0/real(ny - 1,p)
@@ -32,3 +35,4 @@ module params
         & 5.0_p/12.0_p /)
     real(p), parameter :: slip = 1.0_p
 end module params
+

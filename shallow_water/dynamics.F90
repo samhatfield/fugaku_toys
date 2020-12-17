@@ -242,7 +242,7 @@ contains
         real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
         integer :: i, j
-        real(p) :: vec(2+nt)
+        real(dp) :: vec(2+nt)
 
         if (nstop > 99999999) then
             write (*,*) "Integration length longer than 99999999 time steps"
@@ -262,10 +262,10 @@ contains
 
         ! Define the wind forcing:
         do i = 0, ny - 1
-            taux(i) = 0.12_p*(cos(2.0_p*pi*((real(i,p) - 0.5_p)*y0 / &
-                & real(ny-1,p) - 0.5_p*y0)/y0) + &
-                & 2.0_p*sin(pi*((real(i,p) - 0.5_p)*y0/real(ny-1,p) - &
-                & 0.5_p*y0)/y0))/(999.8_p*h0)
+            taux(i) = 0.12_dp*( &
+                & cos(2.0_dp*pi*((real(i,dp) - 0.5_dp) / real(ny-1,dp) - 0.5_dp)) + &
+                & 2.0_dp*sin(pi*((real(i,dp) - 0.5_dp) / real(ny-1,dp) - 0.5_dp)) &
+                )/(999.8_dp*h0)
         end do
 
         do i = 0, nx
