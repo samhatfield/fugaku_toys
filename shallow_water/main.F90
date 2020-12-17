@@ -13,7 +13,7 @@
 
 program main
     use dynamics, only: initialise, rhs, timeupdate
-    use params, only: p, nx, ny, nt, nstop
+    use params, only: dp, p, nx, ny, nt, nstop
 
     implicit none
 
@@ -32,10 +32,14 @@ program main
     ! Timestep loop index
     integer :: n
 
+    ! Timing variables
+    integer :: tic, toc, t_rate
+
     ! Initialise model fields
     call initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
 
     ! Main timestepping loop
+    call system_clock(tic)
     do n = 1, nstop
         if (mod(n, 1000) == 0) then
             write (*,*) "Timestep", n
@@ -47,4 +51,7 @@ program main
         ! Update prognostic variables
         call timeupdate(n, dh, du, dv, h, u, v)
     end do
+    call system_clock(toc, t_rate)
+    write (*,*) "Main loop took", (toc - tic) / real(t_rate,dp), "seconds"
 end program main
+
