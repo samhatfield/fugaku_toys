@@ -21,7 +21,7 @@ contains
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
     subroutine write_field(field, field_name, timestep)
-        use params, only: p, nx, ny
+        use params, only: dp, p, nx, ny
 
         real(p), intent(in) :: field(0:nx,0:ny)
         character, intent(in) :: field_name
@@ -37,7 +37,7 @@ contains
         ! Write field to file
         open(unit=9, file=filename, status='unknown')
         do j = 1, ny-1
-            write(9,*) field(:,j)
+            write(9,*) real(field(:,j),dp)
         end do
         close(9)
     end subroutine write_field
