@@ -35,6 +35,15 @@ program main
     ! Timing variables
     integer :: tic, toc, t_rate
 
+    ! Print working precision
+    if (PREC == 8) then
+        write (*,*) "Using double-precision"
+    else if (PREC == 4) then
+        write (*,*) "Using single-precision"
+    else
+        write (*,*) "Using half-precision"
+    end if
+
     ! Initialise model fields
     call initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
 
