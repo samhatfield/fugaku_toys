@@ -15,8 +15,8 @@ module params
     integer, parameter :: ny = 101
     integer, parameter :: nt = 3
 
-    integer, parameter :: nstop = 2000 !number of timesteps
-    integer, parameter :: nwrite = 100 !Sets frequency of output
+    integer, parameter :: nstop = 20000 !number of timesteps
+    integer, parameter :: nwrite = 1000 !Sets frequency of output
 
     real(dp), parameter :: pi = 3.14159265358979_dp
     real(dp), parameter :: x0 = 3480000.0_dp
