@@ -10,6 +10,9 @@ ifeq ($(FORTCOMP),)
 FORTCOMP := frtpx
 endif
 
+# Set compiler options
+COMPOPT := -Kfast,parallel
+
 # Define bytewidths for different real kinds
 double : PREC = 8
 single : PREC = 4
@@ -22,11 +25,11 @@ half : main
 
 # Define main target
 main: params.o io.o dynamics.o main.o
-	$(FORTCOMP) -o $@ $^
+	$(FORTCOMP) $(COMPOPT) -o $@ $^
 
 # Define generic target for Fortran 90
 %.o: %.F90
-	$(FORTCOMP) -c -cpp -DPREC=$(PREC) $< -o $(basename $<).o
+	$(FORTCOMP) $(COMPOPT) -c -cpp -DPREC=$(PREC) $< -o $(basename $<).o
 
 # Define clean task
 .PHONY: clean
