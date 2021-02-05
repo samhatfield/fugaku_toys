@@ -61,8 +61,9 @@ contains
         ! 1/g*h+0.5(u^2+v^2)
         do j = 0, ny-1
             do i = 0, nx-1
-                b(i,j) = gp*h(i,j) + r0*((u(i,j) + u(i+1,j))**2.0_p + &
-                    & (v(i,j) + v(i,j+1))**2.0_p)
+                b(i,j) = gp*h(i,j) + r0*( &
+                    & (u(i,j) + u(i+1,j))*(u(i,j) + u(i+1,j)) + &
+                    & (v(i,j) + v(i,j+1))*(v(i,j) + v(i,j+1)))
             end do
         end do
 
