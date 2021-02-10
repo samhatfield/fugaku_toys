@@ -164,10 +164,7 @@ contains
     !> @param[inout] h the height
     !> @param[inout] u the eastward current
     !> @param[inout] v the northward current
-    subroutine timeupdate(n, dh, du, dv, h, u, v)
-        use io, only: write_field
-
-        integer, intent(in) :: n
+    subroutine timeupdate(dh, du, dv, h, u, v)
         real(p), intent(in) :: dh(0:nx,0:ny,0:nt)
         real(p), intent(in) :: du(0:nx,0:ny,0:nt)
         real(p), intent(in) :: dv(0:nx,0:ny,0:nt)
@@ -208,13 +205,6 @@ contains
             h(i,0) = h(i,1)
             h(i,ny) = h(i,ny-1)
         end do
-
-        ! Write output
-        if (mod(n, nwrite) == 0) then
-            call write_field(h, 'h', n)
-            call write_field(u, 'u', n)
-            call write_field(v, 'v', n)
-        endif
     end subroutine timeupdate
 
     !> Initialise model fields.
@@ -231,6 +221,8 @@ contains
     !> @param[inout] dv the Adams-Bashforth time increment array for northward
     !>                  current
     subroutine initialise(fu, fv, taux, tauy, h, dh, u, du, v, dv)
+        use io, only: read_restart
+
         real(p), intent(inout) :: fu(0:ny)
         real(p), intent(inout) :: fv(0:ny)
         real(p), intent(inout) :: taux(0:ny)
@@ -243,7 +235,6 @@ contains
         real(p), intent(inout) :: dv(0:nx,0:ny,0:nt)
 
         integer :: i, j
-        real(dp) :: vec(2+nt)
 
         if (nstop > 99999999) then
             write (*,*) "Integration length longer than 99999999 time steps"
@@ -297,36 +288,10 @@ contains
                 end do
             end do
         else
-            open(12, file='./initial/u.dat', status='old', action='read')
-            open(13, file='./initial/v.dat', status='old', action='read')
-            open(14, file='./initial/h.dat', status='old', action='read')
-
-            do j = 1, ny-1
-                do i = 1, nx-1
-                    read(14,*) vec
-                    h(i,j) = vec(3)
-                    dh(i,j,1:(nt-1)) = vec(4:)
-                end do
-            end do
-
-            do j = 1, ny-1
-                do i = 1, nx
-                    read(12,*) vec
-                    u(i,j) = vec(3)
-                    du(i,j,1:(nt-1)) = vec(4:)
-                end do
-            end do
-            do j = 1, ny
-                do i = 1, nx-1
-                    read(13,*) vec
-                    v(i,j) = vec(3)
-                    dv(i,j,1:(nt-1)) = vec(4:)
-                end do
-            end do
-
-            close(12)
-            close(13)
-            close(14)
+            call read_restart(h, dh, 'h', ny-1, nx-1)
+            call read_restart(u, du, 'u', ny-1, nx)
+            call read_restart(v, dv, 'v', ny, nx-1)
         end if
     end subroutine initialise
 end module dynamics
+
