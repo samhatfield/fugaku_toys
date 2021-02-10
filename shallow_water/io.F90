@@ -22,12 +22,10 @@ contains
     !> @param[in] field the field to write
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
-    subroutine write_field(field, field_name, timestep, uppery, upperx)
+    subroutine write_field(field, field_name, timestep)
         real(p), intent(in) :: field(0:nx,0:ny)
         character, intent(in) :: field_name
         integer, intent(in) :: timestep
-        integer, intent(in) :: uppery
-        integer, intent(in) :: upperx
 
         character(len=1024) :: filename
         integer :: j
@@ -38,8 +36,8 @@ contains
 
         ! Write field to file
         open(unit=9, file=filename, status='unknown')
-        do j = 1, uppery
-            write(9,*) real(field(1:upperx,j),dp)
+        do j = 0, ny
+            write(9,*) real(field(:,j),dp)
         end do
         close(9)
     end subroutine write_field
@@ -49,13 +47,11 @@ contains
     !> @param[in] dfield the field to write
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
-    subroutine write_restart(field, dfield, field_name, uppery, upperx)
+    subroutine write_restart(field, dfield, field_name)
 
         real(p), intent(in) :: field(0:nx,0:ny)
         real(p), intent(in) :: dfield(0:nx,0:ny,0:nt)
         character, intent(in) :: field_name
-        integer, intent(in) :: uppery
-        integer, intent(in) :: upperx
 
         character(len=1024) :: filename
         integer :: i, j
@@ -65,10 +61,10 @@ contains
 
         ! Write field to file
         open(unit=9, file=filename, status='replace')
-        do j = 1, uppery
-            do i = 1, upperx
-                write(9,*) real((i-1)*dx,dp), real((j-1)*dy,dp), &
-                     & real(field(i,j),dp), real(dfield(i,j,1),dp), real(dfield(i,j,2),dp)
+        do j = 0, ny
+            do i = 0, nx
+                write(9,*) real(field(i,j),dp), &
+                    & real(dfield(i,j,1),dp), real(dfield(i,j,2),dp)
             end do
         end do
         close(9)
@@ -79,27 +75,25 @@ contains
     !> @param[in] dfield the field to write
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
-    subroutine read_restart(field, dfield, field_name, uppery, upperx)
+    subroutine read_restart(field, dfield, field_name)
         real(p), intent(out) :: field(0:nx,0:ny)
         real(p), intent(out) :: dfield(0:nx,0:ny,0:nt)
         character, intent(in) :: field_name
-        integer, intent(in) :: uppery
-        integer, intent(in) :: upperx
 
         character(len=1024) :: filename
         integer :: i, j
-        real(dp) :: invar(2+nt)
+        real(dp) :: invar(nt)
 
         ! Define output file name
         write (filename, "(A1,A15)") field_name, '.restart.in.txt'
 
         ! Read field from file
         open(unit=9, file=filename, status='old', action='read')
-        do j = 1, uppery
-            do i = 1, upperx
+        do j = 0, ny
+            do i = 0, nx
                 read(9,*) invar
-                field(i,j) = invar(3)
-                dfield(i,j,1:(nt-1)) = invar(4:)
+                field(i,j) = invar(1)
+                dfield(i,j,1:(nt-1)) = invar(2:)
             end do
         end do
         close(9)

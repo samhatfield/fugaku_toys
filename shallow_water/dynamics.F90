@@ -288,9 +288,9 @@ contains
                 end do
             end do
         else
-            call read_restart(h, dh, 'h', ny-1, nx-1)
-            call read_restart(u, du, 'u', ny-1, nx)
-            call read_restart(v, dv, 'v', ny, nx-1)
+            call read_restart(h, dh, 'h')
+            call read_restart(u, du, 'u')
+            call read_restart(v, dv, 'v')
         end if
     end subroutine initialise
 end module dynamics

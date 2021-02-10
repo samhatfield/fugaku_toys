@@ -63,17 +63,17 @@ program main
 
         ! Write output
         if (mod(n, nwrite) == 0) then
-            call write_field(h, 'h', n, ny-1, nx-1)
-            call write_field(u, 'u', n, ny-1, nx)
-            call write_field(v, 'v', n, ny, nx-1)
+            call write_field(h, 'h', n)
+            call write_field(u, 'u', n)
+            call write_field(v, 'v', n)
         endif
     end do
     call system_clock(toc, t_rate)
     write (*,*) "Main loop took", (toc - tic) / real(t_rate,dp), "seconds"
 
     ! Write restart files
-    call write_restart(h, dh, 'h', ny-1, nx-1)
-    call write_restart(u, du, 'u', ny-1, nx)
-    call write_restart(v, dv, 'v', ny, nx-1)
+    call write_restart(h, dh, 'h')
+    call write_restart(u, du, 'u')
+    call write_restart(v, dv, 'v')
 end program main
 
