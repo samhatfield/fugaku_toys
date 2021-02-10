@@ -63,9 +63,9 @@ program main
 
         ! Write output
         if (mod(n, nwrite) == 0) then
-            call write_field(h, 'h', n)
-            call write_field(u, 'u', n)
-            call write_field(v, 'v', n)
+            call write_field(h, 'h', n, ny-1, nx-1)
+            call write_field(u, 'u', n, ny-1, nx)
+            call write_field(v, 'v', n, ny, nx-1)
         endif
     end do
     call system_clock(toc, t_rate)

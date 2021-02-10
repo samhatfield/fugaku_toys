@@ -22,10 +22,12 @@ contains
     !> @param[in] field the field to write
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
-    subroutine write_field(field, field_name, timestep)
+    subroutine write_field(field, field_name, timestep, uppery, upperx)
         real(p), intent(in) :: field(0:nx,0:ny)
         character, intent(in) :: field_name
         integer, intent(in) :: timestep
+        integer, intent(in) :: uppery
+        integer, intent(in) :: upperx
 
         character(len=1024) :: filename
         integer :: j
@@ -36,8 +38,8 @@ contains
 
         ! Write field to file
         open(unit=9, file=filename, status='unknown')
-        do j = 1, ny-1
-            write(9,*) real(field(:,j),dp)
+        do j = 1, uppery
+            write(9,*) real(field(1:upperx,j),dp)
         end do
         close(9)
     end subroutine write_field
