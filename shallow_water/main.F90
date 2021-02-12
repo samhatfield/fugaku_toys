@@ -13,7 +13,7 @@
 
 program main
     use dynamics, only: initialise, rhs, timeupdate
-    use params, only: dp, p, nx, ny, nt, nstop, nwrite
+    use params, only: dp, p, nx, ny, nt, nstop, nwrite, write_restart_at_end
     use io, only: write_field, write_restart
 
     implicit none
@@ -72,8 +72,10 @@ program main
     write (*,*) "Main loop took", (toc - tic) / real(t_rate,dp), "seconds"
 
     ! Write restart files
-    call write_restart(h, dh, 'h')
-    call write_restart(u, du, 'u')
-    call write_restart(v, dv, 'v')
+    if (write_restart_at_end) then
+        call write_restart(h, dh, 'h')
+        call write_restart(u, du, 'u')
+        call write_restart(v, dv, 'v')
+     end if
 end program main
 

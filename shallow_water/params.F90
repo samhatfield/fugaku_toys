@@ -9,7 +9,11 @@ module params
     ! Define default precision for all real variables (defined by CPP macro)
     integer, parameter :: p = PREC
 
-    logical, parameter :: lrestart = .false.
+    ! Restarted run (.false.) or start from rest (.true.)
+    logical, parameter :: restart = .false.
+
+    ! Write restart at end of run or not
+    logical, parameter :: write_restart_at_end = .true.
 
     integer, parameter :: nx = 101
     integer, parameter :: ny = 101

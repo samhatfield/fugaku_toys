@@ -123,7 +123,7 @@ contains
         ! Calculate contribution to prognostic variables for this timestep
         do j = 1, ny-1
             do i = 2,nx-1
-                if (n < 3 .and. (.not. lrestart)) then
+                if (n < 3 .and. (.not. restart)) then
                     du(i,j,0) = du(i,j,1)*dt
                 else
                     du(i,j,0) = ab(1)*du(i,j,1) + ab(2)*du(i,j,2) + &
@@ -133,7 +133,7 @@ contains
         end do
         do j = 2, ny-1
             do i = 1, nx-1
-                if (n < 3 .and. (.not.lrestart)) then
+                if (n < 3 .and. (.not.restart)) then
                     dv(i,j,0) = dv(i,j,1)*dt
                 else
                     dv(i,j,0) = ab(1)*dv(i,j,1) + ab(2)*dv(i,j,2) + &
@@ -144,7 +144,7 @@ contains
 
         do j = 1, ny-1
             do i = 1, nx-1
-                if (n < 3 .and. (.not. lrestart)) then
+                if (n < 3 .and. (.not. restart)) then
                     dh(i,j,0) = dh(i,j,1)*dt
                 else
                     dh(i,j,0) = ab(1)*dh(i,j,1) + ab(2)*dh(i,j,2) + &
@@ -265,7 +265,7 @@ contains
         end do
 
         ! Initialise fields from rest or restart file
-        IF (.not. lrestart) THEN
+        if (.not. restart) then
             do j = 0, ny
                 do i = 0, nx
                     h(i,j) = 0.0_p
