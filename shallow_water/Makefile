@@ -10,13 +10,17 @@ ifeq ($(FORTCOMP),)
 FORTCOMP := frtpx
 endif
 
-# Set compiler options
-COMPOPT := -Kfast,parallel
-
 # Define bytewidths for different real kinds
 double : PREC = 8
 single : PREC = 4
 half : PREC = 2
+
+# Set compiler options
+# All precisions use standard optimisation: -Kfast,parallel
+# Half-precision also uses -Knofz to turn off automatic flush-to-zero behaviour
+double : COMPOPT = -Kfast,parallel
+single : COMPOPT = -Kfast,parallel
+half : COMPOPT = -Kfast,parallel,nofz
 
 # Define precision targets
 double : main
