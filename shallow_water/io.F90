@@ -10,7 +10,7 @@
 !===============================================================================
 
 module io
-    use params, only: dp, p, nx, ny, nt, dx, dy
+    use params, only: dp, p, nx, nt, dx
 
     implicit none
 
@@ -23,7 +23,7 @@ contains
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
     subroutine write_field(field, field_name, timestep)
-        real(p), intent(in) :: field(0:nx,0:ny)
+        real(p), intent(in) :: field(0:nx,0:nx)
         character, intent(in) :: field_name
         integer, intent(in) :: timestep
 
@@ -36,7 +36,7 @@ contains
 
         ! Write field to file
         open(unit=9, file=filename, status='unknown')
-        do j = 0, ny
+        do j = 0, nx
             write(9,*) real(field(:,j),dp)
         end do
         close(9)
@@ -49,8 +49,8 @@ contains
     !> @param[in] timestep the timestep, for the file name
     subroutine write_restart(field, dfield, field_name)
 
-        real(p), intent(in) :: field(0:nx,0:ny)
-        real(p), intent(in) :: dfield(0:nx,0:ny,0:nt)
+        real(p), intent(in) :: field(0:nx,0:nx)
+        real(p), intent(in) :: dfield(0:nx,0:nx,0:nt)
         character, intent(in) :: field_name
 
         character(len=1024) :: filename
@@ -61,7 +61,7 @@ contains
 
         ! Write field to file
         open(unit=9, file=filename, status='replace')
-        do j = 0, ny
+        do j = 0, nx
             do i = 0, nx
                 write(9,*) real(field(i,j),dp), &
                     & real(dfield(i,j,1),dp), real(dfield(i,j,2),dp)
@@ -76,8 +76,8 @@ contains
     !> @param[in] field_name the name of the field, for the file name
     !> @param[in] timestep the timestep, for the file name
     subroutine read_restart(field, dfield, field_name)
-        real(p), intent(out) :: field(0:nx,0:ny)
-        real(p), intent(out) :: dfield(0:nx,0:ny,0:nt)
+        real(p), intent(out) :: field(0:nx,0:nx)
+        real(p), intent(out) :: dfield(0:nx,0:nx,0:nt)
         character, intent(in) :: field_name
 
         character(len=1024) :: filename
@@ -89,7 +89,7 @@ contains
 
         ! Read field from file
         open(unit=9, file=filename, status='old', action='read')
-        do j = 0, ny
+        do j = 0, nx
             do i = 0, nx
                 read(9,*) invar
                 field(i,j) = invar(1)
