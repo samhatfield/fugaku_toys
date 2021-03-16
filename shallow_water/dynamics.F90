@@ -71,7 +71,7 @@ contains
         ! d_x v - d_y u
         do j = 1, nx
             do i = 1, nx
-                zeta(i,j) = (v(i,j)-v(i-1,j))*rdx - (u(i,j) - u(i,j-1))*rdx
+                zeta(i,j) = v(i,j) - v(i-1,j) - u(i,j) + u(i,j-1)
             end do
         end do
 
@@ -83,11 +83,17 @@ contains
                 du(i,j,2) = du(i,j,1)
 
                 ! Calculate new Adams-Bashforth term
-                du(i,j,1) = au_rdx*(u(i+1,j) + u(i-1,j) - r1*u(i,j))*rdx + &
-                    & au_rdx*(u(i,j+1) + u(i,j-1) - r1*u(i,j))*rdx + &
-                    & r2*(fu(j) + r3*(zeta(i,j) + zeta(i,j+1)))* &
-                    & (v(i-1,j) + v(i,j) + v(i-1,j+1) + v(i,j+1)) - &
-                    & (b(i,j) - b(i-1,j))*rdx + taux(j)
+                du(i,j,1) = &
+                    ! Diffusion
+                    &   au_rdx*(u(i+1,j) + u(i-1,j) - r1*u(i,j)) &
+                    & + au_rdx*(u(i,j+1) + u(i,j-1) - r1*u(i,j)) &
+                    ! Coriolis
+                    & + r2*(fu(j) + r3*(zeta(i,j) + zeta(i,j+1)))* &
+                    & (v(i-1,j) + v(i,j) + v(i-1,j+1) + v(i,j+1)) &
+                    ! Bernoulli potential
+                    & - (b(i,j) - b(i-1,j)) &
+                    ! Wind forcing
+                    & + taux(j)
             end do
         end do
 
@@ -98,11 +104,17 @@ contains
                 dv(i,j,2) = dv(i,j,1)
 
                 ! Calculate new Adams-Bashforth term
-                dv(i,j,1) = au_rdx*(v(i+1,j) + v(i-1,j) - r1*v(i,j))*rdx + &
-                    & au_rdx*(v(i,j+1) + v(i,j-1) - r1*v(i,j))*rdx - &
-                    & r2*(fv(j)+r3*(zeta(i,j)+zeta(i+1,j)))* &
-                    & (u(i,j-1)+u(i,j)+u(i+1,j-1)+u(i+1,j)) - &
-                    & (b(i,j)-b(i,j-1))*rdx + tauy(i)
+                dv(i,j,1) = &
+                    ! Diffusion
+                    &   au_rdx*(v(i+1,j) + v(i-1,j) - r1*v(i,j)) &
+                    & + au_rdx*(v(i,j+1) + v(i,j-1) - r1*v(i,j)) &
+                    ! Coriolis
+                    & - r2*(fv(j) + r3*(zeta(i,j) + zeta(i+1,j)))* &
+                    & (u(i,j-1) + u(i,j) + u(i+1,j-1) + u(i+1,j)) &
+                    ! Bernoulli potential
+                    & - (b(i,j) - b(i,j-1)) &
+                    ! Wind forcing
+                    & + tauy(i)
             end do
         end do
 
@@ -113,10 +125,10 @@ contains
                 dh(i,j,2) = dh(i,j,1)
 
                 ! Calculate new Adams-Bashforth term
-                dh(i,j,1) = (h0 + r3*(h(i-1,j) + h(i,j)))*u(i,j)*rdx + &
-                    & (h0 + r3*(h(i,j-1) + h(i,j)))*v(i,j)*rdx - &
-                    & (h0 + r3*(h(i+1,j) + h(i,j)))*u(i+1,j)*rdx - &
-                    & (h0 + r3*(h(i,j+1) + h(i,j)))*v(i,j+1)*rdx
+                dh(i,j,1) = (h0 + r3*(h(i-1,j) + h(i,j)))*u(i,j) + &
+                    & (h0 + r3*(h(i,j-1) + h(i,j)))*v(i,j) - &
+                    & (h0 + r3*(h(i+1,j) + h(i,j)))*u(i+1,j) - &
+                    & (h0 + r3*(h(i,j+1) + h(i,j)))*v(i,j+1)
             end do
         end do
 
@@ -124,7 +136,7 @@ contains
         do j = 1, nx-1
             do i = 2,nx-1
                 if (n < 3 .and. (.not. restart)) then
-                    du(i,j,0) = du(i,j,1)*dt
+                    du(i,j,0) = du(i,j,1)*dt_rdx
                 else
                     du(i,j,0) = ab(1)*du(i,j,1) + ab(2)*du(i,j,2) + &
                         & ab(3)*du(i,j,3)
@@ -134,7 +146,7 @@ contains
         do j = 2, nx-1
             do i = 1, nx-1
                 if (n < 3 .and. (.not.restart)) then
-                    dv(i,j,0) = dv(i,j,1)*dt
+                    dv(i,j,0) = dv(i,j,1)*dt_rdx
                 else
                     dv(i,j,0) = ab(1)*dv(i,j,1) + ab(2)*dv(i,j,2) + &
                         & ab(3)*dv(i,j,3)
@@ -145,7 +157,7 @@ contains
         do j = 1, nx-1
             do i = 1, nx-1
                 if (n < 3 .and. (.not. restart)) then
-                    dh(i,j,0) = dh(i,j,1)*dt
+                    dh(i,j,0) = dh(i,j,1)*dt_rdx
                 else
                     dh(i,j,0) = ab(1)*dh(i,j,1) + ab(2)*dh(i,j,2) + &
                         & ab(3)*dh(i,j,3)
@@ -244,20 +256,21 @@ contains
 
         ! Define Coriolis parameter for U grid
         do j = 0, nx
-            fu(j) = f0 + beta*x0*(real(j,p) - 0.5_p)/real(nx - 1,p)
+            fu(j) = (f0 + beta*x0*(real(j,p) - 0.5_p)/real(nx - 1,p))/rdx
         end do
 
         ! Define Coriolis parameter for V grid
         do j = 0, nx
-            fv(j) = f0 + beta*x0*real(j - 1,p)/real(nx - 1,p)
+            fv(j) = (f0 + beta*x0*real(j - 1,p)/real(nx - 1,p))/rdx
         end do
 
-        ! Define the wind forcing:
+        ! Define the wind forcing
+        ! Here we divide by a factor of rdx, which is multiplied out during time stepping
         do i = 0, nx - 1
             taux(i) = 0.12_dp*( &
                 & cos(2.0_dp*pi*((real(i,dp) - 0.5_dp) / real(nx-1,dp) - 0.5_dp)) + &
                 & 2.0_dp*sin(pi*((real(i,dp) - 0.5_dp) / real(nx-1,dp) - 0.5_dp)) &
-                )/(999.8_dp*h0)
+                )/(999.8_dp*h0*rdx)
         end do
 
         do i = 0, nx
