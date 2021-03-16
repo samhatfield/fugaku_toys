@@ -83,8 +83,8 @@ contains
                 du(i,j,2) = du(i,j,1)
 
                 ! Calculate new Adams-Bashforth term
-                du(i,j,1) = au*(u(i+1,j) + u(i-1,j) - r1*u(i,j))*rdx*rdx + &
-                    & au*(u(i,j+1) + u(i,j-1) - r1*u(i,j))*rdx*rdx + &
+                du(i,j,1) = au_rdx*(u(i+1,j) + u(i-1,j) - r1*u(i,j))*rdx + &
+                    & au_rdx*(u(i,j+1) + u(i,j-1) - r1*u(i,j))*rdx + &
                     & r2*(fu(j) + r3*(zeta(i,j) + zeta(i,j+1)))* &
                     & (v(i-1,j) + v(i,j) + v(i-1,j+1) + v(i,j+1)) - &
                     & (b(i,j) - b(i-1,j))*rdx + taux(j)
@@ -98,8 +98,8 @@ contains
                 dv(i,j,2) = dv(i,j,1)
 
                 ! Calculate new Adams-Bashforth term
-                dv(i,j,1) = au*(v(i+1,j) + v(i-1,j) - r1*v(i,j))*rdx*rdx + &
-                    & au*(v(i,j+1) + v(i,j-1) - r1*v(i,j))*rdx*rdx - &
+                dv(i,j,1) = au_rdx*(v(i+1,j) + v(i-1,j) - r1*v(i,j))*rdx + &
+                    & au_rdx*(v(i,j+1) + v(i,j-1) - r1*v(i,j))*rdx - &
                     & r2*(fv(j)+r3*(zeta(i,j)+zeta(i+1,j)))* &
                     & (u(i,j-1)+u(i,j)+u(i+1,j-1)+u(i+1,j)) - &
                     & (b(i,j)-b(i,j-1))*rdx + tauy(i)

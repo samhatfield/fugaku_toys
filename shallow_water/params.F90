@@ -31,6 +31,7 @@ module params
     real(p), parameter :: gp = 9.81_p
     real(p), parameter :: dx = x0/real(nx - 1,p)
     real(p), parameter :: rdx = 1.0_p/dx
+    real(p), parameter :: au_rdx = real(au,dp)*real(nx - 1,dp)/x0
     real(p), parameter :: ab(nt) = dt*(/ 23.0_p/12.0_p, -16.0_p/12.0_p, &
         & 5.0_p/12.0_p /)
     real(p), parameter :: slip = 1.0_p
