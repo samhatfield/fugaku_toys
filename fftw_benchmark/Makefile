@@ -11,7 +11,7 @@ FORTCOMP := frtpx
 endif
 
 ifeq ($(FORTOPT),)
-FORTOPT := "-Kfast"
+FORTOPT := -Kfast
 endif
 
 # Define main target
