@@ -4,8 +4,7 @@ This simple program benchmarks the 1D real-to-complex Fast Fourier Transform
 made available by the FFTW library. It performs a direct-inverse transform
 cycle on a large 1D array many times over and measures the wallclock time.
 
-It is based on [this](https://gist.github.com/appleparan/
-c048c44668ede7ef28ba63c660b6dcf3) GitHub Gist.
+It is based on [this](https://gist.github.com/appleparan/c048c44668ede7ef28ba63c660b6dcf3) GitHub Gist.
 
 ## Building
 First define the `FFTWF_LIB` environment variable, pointing it to the location
