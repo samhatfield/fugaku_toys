@@ -1,6 +1,5 @@
 #===============================================================================
-# Makefile for Lorenz '63 model used for investigating half-precision support on
-# Fugaku
+# Makefile for FFTW benchmark.
 #
 # ECMWF/RIKEN-CCS
 #===============================================================================
@@ -10,13 +9,19 @@ ifeq ($(FORTCOMP),)
 FORTCOMP := frtpx
 endif
 
+# Set optimisation flag to -Kfast if not already set
 ifeq ($(FORTOPT),)
 FORTOPT := -Kfast
 endif
 
+# Link to libfjcrt when compiling on Fugaku
+ifeq ($(FORTLIB),)
+FORTLIB := -lfjcrt
+endif
+
 # Define main target
 main: main.o
-	$(FORTCOMP) $(FORTOPT) $(FFTWF_LIB) -o $@ $^
+	$(FORTCOMP) $(FORTOPT) $(FFTWF_LIB) $(FORTLIB) -o $@ $^
 
 # Define generic target for Fortran 90
 %.o: %.F90
