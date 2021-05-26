@@ -13,8 +13,9 @@
 program main
     implicit none
 
-    integer, parameter :: hp = 2
     integer, parameter :: dp = 8
+    integer, parameter :: sp = 4
+    integer, parameter :: hp = 2
 
     integer, parameter :: n_repeat = 100
 
@@ -31,6 +32,11 @@ program main
     real(dp) :: a_dp(lda,k)
     real(dp) :: b_dp(ldb,n)
     real(dp) :: c_dp(ldc,n)
+    real(sp), parameter :: alpha_sp = 1.0
+    real(sp), parameter :: beta_sp = 0.0
+    real(sp) :: a_sp(lda,k)
+    real(sp) :: b_sp(ldb,n)
+    real(sp) :: c_sp(ldc,n)
     real(hp), parameter :: alpha_hp = alpha_dp
     real(hp), parameter :: beta_hp = beta_dp
     real(hp) :: a_hp(lda,k)
@@ -49,6 +55,7 @@ program main
         do j = 1, k
             call random_number(temp)
             a_dp(i,j) = temp
+            a_sp(i,j) = temp
             a_hp(i,j) = temp
         end do
     end do
@@ -56,6 +63,7 @@ program main
         do j = 1, n
             call random_number(temp)
             b_dp(i,j) = temp
+            b_sp(i,j) = temp
             b_hp(i,j) = temp
         end do
     end do
@@ -71,6 +79,17 @@ program main
         write (*,*) "B"
         do i = 1, lda
             write (*,*) b_dp(i,:)
+        end do
+
+        write (*,*) ""
+        write (*,*) "Single-precision matrices"
+        write (*,*) "A"
+        do i = 1, lda
+            write (*,*) a_sp(i,:)
+        end do
+        write (*,*) "B"
+        do i = 1, lda
+            write (*,*) b_sp(i,:)
         end do
     
         write (*,*) ""
@@ -95,6 +114,16 @@ program main
     write (*,*) "Double-precision"
     write (*,*) (toc - tic) / real(t_rate,dp)
 
+    ! Benchmark single-precision
+    call system_clock(tic)
+    do i = 1, n_repeat
+        call sgemm(transa, transb, m, n, k, alpha_sp, a_sp, lda, b_sp, ldb, beta_sp, c_sp, ldc)
+    end do
+    call system_clock(toc, t_rate)
+
+    write (*,*) "Single-precision"
+    write (*,*) (toc - tic) / real(t_rate,dp)
+
     ! Benchmark half-precision
     call system_clock(tic)
     do i = 1, n_repeat
@@ -110,6 +139,11 @@ program main
         write (*,*) "Double-precision C"
         do i = 1, ldc
             write (*,*) c_dp(i,:)
+        end do
+        write (*,*) ""
+        write (*,*) "Single-precision C"
+        do i = 1, ldc
+            write (*,*) c_sp(i,:)
         end do
         write (*,*) ""
         write (*,*) "Half-precision C"
