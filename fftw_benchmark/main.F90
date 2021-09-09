@@ -13,7 +13,7 @@ program main
     integer, parameter :: n = 10000
 
     ! Number of times to repeat FFT cycle
-    integer, parameter :: n_repeats = 1000
+    integer, parameter :: n_repeats = 100000
 
     ! Storage array for input/output
     real(4) :: test_in(n+2)

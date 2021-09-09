@@ -17,4 +17,4 @@ which uses the `fujitsu-fftw` Spack module.
 Also if you don't want to use the Fujitsu compiler you must also set the
 `FORTCOMP` environment variable to your compiler of choice, set the
 `FORTOPT` environment variable with your optimisation flags and set the
-`FORTLIB` to the empty string.
+`export FORTLIB=" "` (note the space).
