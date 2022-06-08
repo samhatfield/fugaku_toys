@@ -20,7 +20,7 @@ def create_cube(data, name):
 
 
 h_data = []
-for filename in sorted(glob("./output/h*.txt"), key=lambda name: int(name[11:-4])):
+for filename in sorted(glob("./output/h.????????.txt"), key=lambda name: int(name[11:-4])):
     h_data.append(np.loadtxt(filename))
 
 print('Converting to NetCDF...')
